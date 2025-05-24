@@ -10,6 +10,12 @@ RUN chmod +x /usr/lib/cgi-bin/status_check
 RUN docker-php-ext-install pdo_mysql
 RUN a2enmod rewrite
 RUN a2enmod cgi
+RUN a2enmod headers
+
+# Add CSP headers configuration
+RUN echo 'Header set Content-Security-Policy "default-src '\''self'\''; script-src '\''self'\'' '\''unsafe-inline'\'' '\''unsafe-eval'\''; style-src '\''self'\'' '\''unsafe-inline'\''; img-src '\''self'\'' data: https:; font-src '\''self'\'' data:; connect-src '\''self'\'' https:; frame-ancestors '\''none'\''; form-action '\''self'\''; base-uri '\''self'\'';"' > /etc/apache2/conf-available/csp-headers.conf
+
+RUN a2enconf csp-headers
 RUN service apache2 restart
 RUN chown -R www-data:www-data /var/www
 #RUN ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/
