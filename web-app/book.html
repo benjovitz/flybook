@@ -234,20 +234,24 @@
 
     function populateFlights(flights, from, to) {
         $('#flightsTblBody').empty();
-        var row = "";
-        for (var i = 0; i < flights.length; i++) {
-            row +=
-                '<tr>' +
-                '<th scope="row">' + flights[i].number + '</th>' +
-                '<td>' + from + '</td>' +
-                '<td>' + to + '</td>' +
-                '<td>' + flights[i].date_time_depart + '</td>' +
-                '<td>' + flights[i].date_time_arriv + '</td>' +
-                '<td>' + flights[i].gate + '</td>' +
-                '<td><button class="bookBtn" type="button" data-id="' + flights[i].id + '">Book</button></td>' +
-                '</tr>';
-            $('#flightsTblBody').append(row);
-        }
+        flights.forEach(function(flight) {
+            var $row = $('<tr>');
+            $row.append($('<th>').attr('scope', 'row').text(flight.number));
+            $row.append($('<td>').text(from));
+            $row.append($('<td>').text(to));
+            $row.append($('<td>').text(flight.date_time_depart));
+            $row.append($('<td>').text(flight.date_time_arriv));
+            $row.append($('<td>').text(flight.gate));
+            
+            var $bookBtn = $('<button>')
+                .addClass('bookBtn')
+                .attr('type', 'button')
+                .attr('data-id', flight.id)
+                .text('Book');
+            
+            $row.append($('<td>').append($bookBtn));
+            $('#flightsTblBody').append($row);
+        });
     }
 
     $(document).on('click', '.bookBtn', function () {
